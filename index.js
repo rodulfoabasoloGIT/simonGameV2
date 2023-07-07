@@ -1,37 +1,59 @@
-let level = 0;
-const divs = [$("#green"), $("#red"), $("#yellow"), $("#blue")];
-let arrTrace = [];
-let playerChoice = [];
+// const buttonDiv = [$(".green"), $(".red"), $(".yellow"), $(".blue")];
 
-function gameInit() {
-  $(document).keypress(function () {
-    const selector = Math.floor(Math.random() * 4);
-    const firstPattern = arrTrace.push(divs[selector]);
-    const randomDiv = divs[selector].addClass("pressed");
-    setTimeout(function () {
-      randomDiv.removeClass("pressed");
-    }, 200);
+// const buttonAudio = [
+//   "sounds/blue.mp3",
+//   "sounds/green.mp3",
+//   "sounds/red.mp3",
+//   "sounds/wrong.mp3",
+//   "sounds/yellow.mp3",
+// ];
 
-    if (arrTrace != 0) {
-      $(document).off("keypress");
-    }
-    console.log(arrTrace, selector);
-  });
-}
+// $(document).keypress(function () {
+//   let randomNumber = Math.floor(Math.random() * 4);
+//   const buttonSelect = buttonDiv[randomNumber];
+//   const buttonPlay = buttonAudio[randomNumber];
+//   const players = new Audio(buttonPlay);
+//   players.play();
+//   console.log(buttonSelect);
 
-function gameSequence(initialize) {
-  divs.forEach((divs) => {
-    divs.on("click", function () {
-      if (arrTrace.length === playerChoice.length) {
-        console.log("game over");
-      }
-    });
-  });
-}
-gameSequence(gameInit);
+//   console.log(randomNumber);
+// });
 
-// function gameStart(initialize) {
-
+// for (let i = 0; i < buttonDiv.length; i++) {
+//   buttonDiv[i].on("click", function () {});
 // }
 
-// gameStart(gameInit);
+// console.log(buttonAudio);
+
+let numbClick = -1;
+let userPattern = [];
+let correctPattern = [];
+let possibleColors = ["red", "green", "yellow", "blue"];
+let highScore = 0;
+let level = 0;
+
+function nextSequence() {
+  const randomNumber = Math.floor(Math.random() * 4);
+  let color = possibleColors[randomNumber];
+  correctPattern.push(color);
+  console.log(color);
+  playAudio(color);
+  animation("#" + color);
+  console.log(correctPattern);
+}
+
+function playAudio(color) {
+  let relPath = `sounds/${color}.mp3`;
+  let audio = new Audio(relPath);
+  audio.play();
+}
+
+function animation(id) {
+  $(id).fadeOut(100).fadeIn(100);
+}
+
+$(document).on("keydown", function () {
+  if (level <= 0) {
+    nextSequence();
+  }
+});
