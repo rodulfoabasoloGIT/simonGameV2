@@ -1,10 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Play&family=Press+Start+2P&family=Roboto&display=swap");
+
 body {
   text-align: center;
-  background-color: #011f3f;
+  background-color: rgb(146, 55, 195);
 }
 
 #level-title {
-  font-family: "Press Start 2P", cursive;
+  font-family: "Play", sans-serif;
   font-size: 3rem;
   margin: 4%;
   color: #fef2bf;
@@ -32,7 +34,7 @@ body {
 
 h3,
 h4 {
-  font-family: "Press Start 2P", cursive;
+  font-family: "Play", sans-serif;
   font-size: 2rem;
 
   color: #fef2bf;
@@ -54,7 +56,7 @@ h4 {
   background-color: yellow;
 }
 
-.pressed {
-  box-shadow: 0 0 20px white;
-  background-color: grey;
+.hover {
+  box-shadow: 0 0 10px #fbfbfb;
+  background-color: #fad3ff;
 }
