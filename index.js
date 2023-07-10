@@ -1,98 +1,74 @@
-// const buttonDiv = [$(".green"), $(".red"), $(".yellow"), $(".blue")];
-
-// const buttonAudio = [
-//   "sounds/blue.mp3",
-//   "sounds/green.mp3",
-//   "sounds/red.mp3",
-//   "sounds/wrong.mp3",
-//   "sounds/yellow.mp3",
-// ];
-
-// $(document).keypress(function () {
-//   let randomNumber = Math.floor(Math.random() * 4);
-//   const buttonSelect = buttonDiv[randomNumber];
-//   const buttonPlay = buttonAudio[randomNumber];
-//   const players = new Audio(buttonPlay);
-//   players.play();
-//   console.log(buttonSelect);
-
-//   console.log(randomNumber);
-// });
-
-// for (let i = 0; i < buttonDiv.length; i++) {
-//   buttonDiv[i].on("click", function () {});
-// }
-
-// console.log(buttonAudio);
-
 let numbClick = -1;
-let userPattern = [];
 let correctPattern = [];
-let possibleColors = ["red", "green", "yellow", "blue"];
-let highScore = 0;
+let userPattern = [];
 let level = 0;
+let highScore = 0;
+const divColors = ["red", "green", "blue", "yellow"];
 
-$(".btn").on("click", function (e) {
-  numbClick++; // incremented everytime the divs are clicked
-  let color = e.target.id; // to select the actual ID on the DOM or HTML or Document
-  animation("#" + color); // callback
-  playAudio(color); // callback
-  checkAnswer(color);
+$(document).on("keypress", function () {
+  if (level <= 0) {
+    $("h1").text("Game begins!");
+    gameSequence();
+  }
 });
 
-function checkAnswer(color) {
-  userPattern.push(color); //inserting the color to the empty array which is userPattern
-  if (color === correctPattern[numbClick]) {
+function gameSequence() {
+  //to keep the game going
+  level++;
+  $("h3").text(`level ${level}`);
+  const randomNumber = Math.floor(Math.random() * 4);
+  const randomColor = divColors[randomNumber];
+  colorAudio(randomColor);
+  $("#" + randomColor).addClass("pressed");
+  setTimeout(() => {
+    $("#" + randomColor).removeClass("pressed");
+  }, 100);
+  correctPattern.push(randomColor);
+}
+
+function colorAudio(randomColor) {
+  const audioPath = `sounds/${randomColor}.mp3`;
+  const audioPlay = new Audio(audioPath);
+  audioPlay.play();
+}
+
+$(".btn").on("click", function (e) {
+  numbClick++;
+  const colorClicked = e.target.id;
+  colorAudio(colorClicked);
+  checkAnswer(colorClicked);
+  $("#" + colorClicked).addClass("pressed");
+  setTimeout(() => {
+    $("#" + colorClicked).removeClass("pressed");
+  }, 100);
+});
+
+function checkAnswer(colorClicked) {
+  userPattern.push(colorClicked);
+  if (colorClicked === correctPattern[numbClick]) {
     if (userPattern.length == correctPattern.length) {
-      // if the user pick the correct color it resets
-      setTimeout(function () {
+      setTimeout(() => {
         userPattern = [];
-        nextSequence();
         numbClick = -1;
+        gameSequence();
       }, 1000);
     }
   } else {
-    $("h2").text("Game Over!");
+    $("h1").text("Game over! Press any key to start");
     $("body").addClass("game-over");
-    setTimeout(function () {
+    setTimeout(() => {
       $("body").removeClass("game-over");
-    }, 100);
-    userPattern = [];
+      let wrongAudioPath = "sounds/wrong.mp3";
+      let wrongAudio = new Audio(wrongAudioPath);
+      wrongAudio.play();
+    }, 150);
     correctPattern = [];
+    userPattern = [];
+    numbClick = -1;
+    level = 0;
     if (level > highScore) {
       highScore = level;
-      $("h4").text(highScore);
+      $("h4").text(`high score is ${highScore}`);
     }
-    level = 0;
-    numbClick = -1;
   }
 }
-// to start the game
-function nextSequence() {
-  level++;
-  $("h3").text(`${level}`);
-  const randomNumber = Math.floor(Math.random() * 4); //randomized number
-  let color = possibleColors[randomNumber]; // choose random colors
-  correctPattern.push(color); // the selected random colors will be pushed to empty array
-  playAudio(color);
-  animation("#" + color);
-  console.log(correctPattern, color);
-}
-// function for playing the audio
-function playAudio(color) {
-  let relPath = `sounds/${color}.mp3`;
-  let audio = new Audio(relPath);
-  audio.play();
-}
-// function for animation or hover
-function animation(id) {
-  $(id).fadeOut(100).fadeIn(100);
-}
-
-// function initilization for game to start
-$(document).on("keyup", function () {
-  if (level <= 0) {
-    $("h1").text("Game Begins!");
-    nextSequence();
-  }
-});
