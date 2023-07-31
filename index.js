@@ -4,13 +4,23 @@ let userPattern = [];
 let level = 0;
 let highScore = 0;
 const divColors = ["red", "green", "blue", "yellow"];
-//instruction added
-$(document).on("keypress", () => {
-  if (level <= 0) {
-    $("h1").text("Game Start!");
-    gameSequence();
-  }
-});
+
+if (screen.width > 768) {
+  $(document).on("keypress", () => {
+    if (level <= 0) {
+      $("h1").text("Game Start!");
+      gameSequence();
+    }
+  });
+} else {
+  $("h1").text("Tap the screen to start");
+  document.addEventListener("touchstart", () => {
+    if (level <= 0) {
+      $("h1").text("Game Start!");
+      gameSequence();
+    }
+  });
+}
 
 const gameSequence = () => {
   level++;
