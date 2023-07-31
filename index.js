@@ -4,7 +4,7 @@ let userPattern = [];
 let level = 0;
 let highScore = 0;
 const divColors = ["red", "green", "blue", "yellow"];
-
+//instruction added
 $(document).on("keypress", () => {
   if (level <= 0) {
     $("h1").text("Game Start!");
